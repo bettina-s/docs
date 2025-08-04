@@ -1,6 +1,6 @@
 ---
-title: 'Introduction'
-description: 'Example section for showcasing API endpoints'
+title: "Introduction"
+description: "Learn how to use the Helo API to integrate email sending into your application"
 ---
 
 <Note>
@@ -12,11 +12,7 @@ description: 'Example section for showcasing API endpoints'
 
 There are two ways to build API documentation: [OpenAPI](https://mintlify.com/docs/api-playground/openapi/setup) and [MDX components](https://mintlify.com/docs/api-playground/mdx/configuration). For the starter kit, we are using the following OpenAPI specification.
 
-<Card
-  title="Plant Store Endpoints"
-  icon="leaf"
-  href="https://github.com/mintlify/starter/blob/main/api-reference/openapi.json"
->
+<Card title="Plant Store Endpoints" icon="leaf" href="https://github.com/mintlify/starter/blob/main/api-reference/openapi.json">
   View the OpenAPI specification file
 </Card>
 
@@ -31,3 +27,13 @@ All API endpoints are authenticated using Bearer tokens and picked up from the s
   }
 ]
 ```
+
+### Endpoint URL
+
+The Helo API is built on [REST](https://en.wikipedia.org/wiki/Representational_State_Transfer) principles. Authenticated users can interact with any of our URIs by using the specified HTTP request method. We enforce TLS encryption by issuing requests via HTTPS.
+
+```
+https://api.helohq.com
+```
+
+### Authentication
