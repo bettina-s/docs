@@ -1,16 +1,13 @@
 {
-  "openapi": "3.1.0",
+  "openapi": "3.0.3",
   "info": {
-    "title": "OpenAPI Plant Store",
-    "description": "A sample API that uses a plant store as an example to demonstrate features in the OpenAPI specification",
-    "license": {
-      "name": "MIT"
-    },
-    "version": "1.0.0"
+    "title": "HeloEmail API",
+    "description": "Development documentation",
+    "version": "1"
   },
   "servers": [
     {
-      "url": "http://sandbox.mintlify.com"
+      "url": "http://[::]:8080"
     }
   ],
   "security": [
@@ -18,15 +15,422 @@
       "bearerAuth": []
     }
   ],
+  "tags": [
+    {
+      "name": "ActivityEvents"
+    },
+    {
+      "name": "API Credentials"
+    },
+    {
+      "name": "Users"
+    },
+    {
+      "name": "SMTP Users"
+    },
+    {
+      "name": "Channels"
+    },
+    {
+      "name": "Domains"
+    }
+  ],
   "paths": {
-    "/plants": {
+    "/activity/events": {
       "get": {
-        "description": "Returns all plants from the system that the user has access to",
         "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "in": "query",
+            "name": "channelId",
+            "required": false
+          },
+          {
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "in": "query",
+            "name": "after",
+            "required": false
+          },
+          {
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "Date"
+                },
+                {
+                  "format": "date-time",
+                  "type": "string"
+                },
+                {
+                  "format": "date",
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                }
+              ]
+            },
+            "in": "query",
+            "name": "startDate",
+            "required": false
+          },
+          {
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "Date"
+                },
+                {
+                  "format": "date-time",
+                  "type": "string"
+                },
+                {
+                  "format": "date",
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                }
+              ]
+            },
+            "in": "query",
+            "name": "endDate",
+            "required": false
+          },
+          {
+            "schema": {
+              "maximum": 500,
+              "type": "integer"
+            },
+            "in": "query",
+            "name": "limit",
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "messageId": {
+                            "format": "uuid",
+                            "type": "string"
+                          },
+                          "channelId": {
+                            "format": "uuid",
+                            "type": "string"
+                          },
+                          "mailType": {
+                            "anyOf": [
+                              {
+                                "const": "Transactional",
+                                "type": "string"
+                              },
+                              {
+                                "const": "Broadcast",
+                                "type": "string"
+                              }
+                            ]
+                          },
+                          "mailSource": {
+                            "anyOf": [
+                              {
+                                "const": "Smtp",
+                                "type": "string"
+                              },
+                              {
+                                "const": "Api",
+                                "type": "string"
+                              }
+                            ]
+                          },
+                          "eventType": {
+                            "anyOf": [
+                              {
+                                "const": "Accepted",
+                                "type": "string"
+                              },
+                              {
+                                "const": "Processed",
+                                "type": "string"
+                              },
+                              {
+                                "const": "Delivered",
+                                "type": "string"
+                              },
+                              {
+                                "const": "Bounced",
+                                "type": "string"
+                              },
+                              {
+                                "const": "Opened",
+                                "type": "string"
+                              },
+                              {
+                                "const": "Clicked",
+                                "type": "string"
+                              },
+                              {
+                                "const": "ReportedSpam",
+                                "type": "string"
+                              },
+                              {
+                                "const": "SubscriptionChanged",
+                                "type": "string"
+                              }
+                            ]
+                          },
+                          "timestamp": {
+                            "anyOf": [
+                              {
+                                "type": "Date"
+                              },
+                              {
+                                "format": "date-time",
+                                "type": "string"
+                              },
+                              {
+                                "format": "date",
+                                "type": "string"
+                              },
+                              {
+                                "type": "number"
+                              }
+                            ]
+                          },
+                          "subject": {
+                            "type": "string"
+                          },
+                          "recipients": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "messageId",
+                          "channelId",
+                          "mailType",
+                          "eventType",
+                          "timestamp",
+                          "subject",
+                          "recipients"
+                        ]
+                      }
+                    },
+                    "after": {
+                      "type": "string"
+                    },
+                    "totalCount": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "results",
+                    "totalCount"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "errors": {
+                      "type": "object",
+                      "patternProperties": {
+                        "^(.*)$": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "operationId": "activityEvents_list",
+        "tags": [
+          "ActivityEvents"
+        ],
+        "detail": {
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ]
+        },
+        "summary": "List all activity events",
+        "x-codeSampleId": "activityEvents_list",
+        "x-codeSamples": [
+          {
+            "lang": "ruby",
+            "source": "Helo.configure do |config|\n  config.access_token = \"YOUR_BEARER_TOKEN\"\nend\n\nopts = {\n  channel_id: \"38400000-8cf0-11bd-b23e-10b96e4ef00d\",\n  after: \"38400000-8cf0-11bd-b23e-10b96e4ef00d\",\n  start_date: Helo::ActivityEventsListStartDateParameter.new,\n  end_date: Helo::ActivityEventsListStartDateParameter.new,\n  limit: 56\n}\nHelo::ActivityEvents.list(opts)"
+          }
+        ]
+      }
+    },
+    "/api-credentials": {
+      "post": {
+        "tags": [
+          "API Credentials"
+        ],
+        "operationId": "apiCredential_create",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GenerateApiCredentialRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiCredentialResponseWithKey"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Create an API credential",
+        "x-codeSampleId": "apiCredential_create",
+        "x-codeSamples": [
+          {
+            "lang": "ruby",
+            "source": "Helo.configure do |config|\n  config.access_token = \"YOUR_BEARER_TOKEN\"\nend\n\ngenerate_api_credential_request = Helo::GenerateApiCredentialRequest.new\nHelo::APICredentials.create(generate_api_credential_request)"
+          }
+        ]
+      },
+      "get": {
+        "tags": [
+          "API Credentials"
+        ],
+        "operationId": "apiCredential_list",
+        "parameters": [
+          {
+            "name": "channelId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
           {
             "name": "limit",
             "in": "query",
-            "description": "The maximum number of results to return",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -35,38 +439,81 @@
         ],
         "responses": {
           "200": {
-            "description": "Plant response",
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Plant"
-                  }
+                  "$ref": "#/components/schemas/PaginationResultOfApiCredentialResponse"
                 }
               }
             }
           },
-          "400": {
-            "description": "Unexpected error",
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
           }
-        }
-      },
-      "post": {
-        "description": "Creates a new plant in the store",
+        },
+        "summary": "List all API credentials",
+        "x-codeSampleId": "apiCredential_list",
+        "x-codeSamples": [
+          {
+            "lang": "ruby",
+            "source": "Helo.configure do |config|\n  config.access_token = \"YOUR_BEARER_TOKEN\"\nend\n\nopts = {\n  channel_id: \"38400000-8cf0-11bd-b23e-10b96e4ef00d\",\n  name: \"name_example\",\n  limit: 56,\n  offset: 56\n}\nHelo::APICredentials.list(opts)"
+          }
+        ]
+      }
+    },
+    "/api-credentials/{id}": {
+      "patch": {
+        "tags": [
+          "API Credentials"
+        ],
+        "operationId": "apiCredential_update",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
         "requestBody": {
-          "description": "Plant to add to the store",
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/NewPlant"
+                "$ref": "#/components/schemas/UpdateApiCredentialRequest"
               }
             }
           },
@@ -74,135 +521,2539 @@
         },
         "responses": {
           "200": {
-            "description": "plant response",
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Plant"
+                  "$ref": "#/components/schemas/ApiCredentialResponse"
                 }
               }
             }
           },
-          "400": {
-            "description": "unexpected error",
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
           }
-        }
-      }
-    },
-    "/plants/{id}": {
-      "delete": {
-        "description": "Deletes a single plant based on the ID supplied",
+        },
+        "summary": "Update an API credential",
+        "x-codeSampleId": "apiCredential_update",
+        "x-codeSamples": [
+          {
+            "lang": "ruby",
+            "source": "Helo.configure do |config|\n  config.access_token = \"YOUR_BEARER_TOKEN\"\nend\n\nid = \"38400000-8cf0-11bd-b23e-10b96e4ef00d\"\nupdate_api_credential_request = Helo::UpdateApiCredentialRequest.new\nHelo::APICredentials.update(id, update_api_credential_request)"
+          }
+        ]
+      },
+      "get": {
+        "tags": [
+          "API Credentials"
+        ],
+        "operationId": "apiCredential_retrieve",
         "parameters": [
           {
             "name": "id",
             "in": "path",
-            "description": "ID of plant to delete",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int64"
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiCredentialResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Retrieve an API credential",
+        "x-codeSampleId": "apiCredential_retrieve",
+        "x-codeSamples": [
+          {
+            "lang": "ruby",
+            "source": "Helo.configure do |config|\n  config.access_token = \"YOUR_BEARER_TOKEN\"\nend\n\nid = \"38400000-8cf0-11bd-b23e-10b96e4ef00d\"\nHelo::APICredentials.retrieve(id)"
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "API Credentials"
+        ],
+        "operationId": "apiCredential_delete",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
             }
           }
         ],
         "responses": {
           "204": {
-            "description": "Plant deleted",
-            "content": {}
+            "description": "No Content"
           },
-          "400": {
-            "description": "unexpected error",
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
           }
-        }
+        },
+        "summary": "Delete an API credential",
+        "x-codeSampleId": "apiCredential_delete",
+        "x-codeSamples": [
+          {
+            "lang": "ruby",
+            "source": "Helo.configure do |config|\n  config.access_token = \"YOUR_BEARER_TOKEN\"\nend\n\nid = \"38400000-8cf0-11bd-b23e-10b96e4ef00d\"\nHelo::APICredentials.delete(id)"
+          }
+        ]
       }
-    }
-  },
-  "webhooks": {
-    "/plant/webhook": {
+    },
+    "/users": {
       "post": {
-        "description": "Information about a new plant added to the store",
+        "tags": [
+          "Users"
+        ],
+        "operationId": "user_create",
         "requestBody": {
-          "description": "Plant added to the store",
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/NewPlant"
+                "$ref": "#/components/schemas/CreateUserRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
               }
             }
           }
         },
+        "summary": "Create a user",
+        "x-codeSampleId": "user_create",
+        "x-codeSamples": [
+          {
+            "lang": "ruby",
+            "source": "Helo.configure do |config|\n  config.access_token = \"YOUR_BEARER_TOKEN\"\nend\n\ncreate_user_request = Helo::CreateUserRequest.new\nHelo::Users.create(create_user_request)"
+          }
+        ]
+      },
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "operationId": "user_list",
+        "parameters": [
+          {
+            "name": "Limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "Offset",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "Name",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Email",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Role",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
-            "description": "Return a 200 status to indicate that the data was received successfully"
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginationResultOfUserResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
           }
-        }
+        },
+        "summary": "List all users",
+        "x-codeSampleId": "user_list",
+        "x-codeSamples": [
+          {
+            "lang": "ruby",
+            "source": "Helo.configure do |config|\n  config.access_token = \"YOUR_BEARER_TOKEN\"\nend\n\nopts = {\n  limit: 56,\n  offset: 56,\n  name: \"name_example\",\n  email: \"email_example\",\n  role: \"role_example\"\n}\nHelo::Users.list(opts)"
+          }
+        ]
+      }
+    },
+    "/users/{id}": {
+      "patch": {
+        "tags": [
+          "Users"
+        ],
+        "operationId": "user_update",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateUserRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Update a user",
+        "x-codeSampleId": "user_update",
+        "x-codeSamples": [
+          {
+            "lang": "ruby",
+            "source": "Helo.configure do |config|\n  config.access_token = \"YOUR_BEARER_TOKEN\"\nend\n\nid = \"38400000-8cf0-11bd-b23e-10b96e4ef00d\"\nupdate_user_request = Helo::UpdateUserRequest.new\nHelo::Users.update(id, update_user_request)"
+          }
+        ]
+      },
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "operationId": "user_retrieve",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Retrieve a user",
+        "x-codeSampleId": "user_retrieve",
+        "x-codeSamples": [
+          {
+            "lang": "ruby",
+            "source": "Helo.configure do |config|\n  config.access_token = \"YOUR_BEARER_TOKEN\"\nend\n\nid = \"38400000-8cf0-11bd-b23e-10b96e4ef00d\"\nHelo::Users.retrieve(id)"
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Users"
+        ],
+        "operationId": "user_delete",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Delete a user",
+        "x-codeSampleId": "user_delete",
+        "x-codeSamples": [
+          {
+            "lang": "ruby",
+            "source": "Helo.configure do |config|\n  config.access_token = \"YOUR_BEARER_TOKEN\"\nend\n\nid = \"38400000-8cf0-11bd-b23e-10b96e4ef00d\"\nHelo::Users.delete(id)"
+          }
+        ]
+      }
+    },
+    "/channels/{channelId}/smtp-users": {
+      "post": {
+        "tags": [
+          "SMTP Users"
+        ],
+        "operationId": "smtpUser_create",
+        "parameters": [
+          {
+            "name": "channelId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateSmtpUserRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SmtpUserWithPasswordResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Create an SMTP user",
+        "x-codeSampleId": "smtpUser_create",
+        "x-codeSamples": [
+          {
+            "lang": "ruby",
+            "source": "Helo.configure do |config|\n  config.access_token = \"YOUR_BEARER_TOKEN\"\nend\n\nchannel_id = \"38400000-8cf0-11bd-b23e-10b96e4ef00d\"\ncreate_smtp_user_request = Helo::CreateSmtpUserRequest.new\nHelo::SMTPUsers.create(channel_id, create_smtp_user_request)"
+          }
+        ]
+      },
+      "get": {
+        "tags": [
+          "SMTP Users"
+        ],
+        "operationId": "smtpUser_list",
+        "parameters": [
+          {
+            "name": "Limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "Offset",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "Name",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "channelId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginationResultOfSmtpUserResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "summary": "List all SMTP users",
+        "x-codeSampleId": "smtpUser_list",
+        "x-codeSamples": [
+          {
+            "lang": "ruby",
+            "source": "Helo.configure do |config|\n  config.access_token = \"YOUR_BEARER_TOKEN\"\nend\n\nchannel_id = \"38400000-8cf0-11bd-b23e-10b96e4ef00d\"\nopts = {\n  limit: 56,\n  offset: 56,\n  name: \"name_example\"\n}\nHelo::SMTPUsers.list(channel_id, opts)"
+          }
+        ]
+      }
+    },
+    "/channels/{channelId}/smtp-users/{id}": {
+      "patch": {
+        "tags": [
+          "SMTP Users"
+        ],
+        "operationId": "smtpUser_update",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "channelId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SmtpUserUpdateRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SmtpUserResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Update an SMTP user",
+        "x-codeSampleId": "smtpUser_update",
+        "x-codeSamples": [
+          {
+            "lang": "ruby",
+            "source": "Helo.configure do |config|\n  config.access_token = \"YOUR_BEARER_TOKEN\"\nend\n\nid = \"38400000-8cf0-11bd-b23e-10b96e4ef00d\"\nchannel_id = \"38400000-8cf0-11bd-b23e-10b96e4ef00d\"\nsmtp_user_update_request = Helo::SmtpUserUpdateRequest.new\nHelo::SMTPUsers.update(id, channel_id, smtp_user_update_request)"
+          }
+        ]
+      },
+      "get": {
+        "tags": [
+          "SMTP Users"
+        ],
+        "operationId": "smtpUser_retrieve",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "channelId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SmtpUserResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Retrieve an SMTP user",
+        "x-codeSampleId": "smtpUser_retrieve",
+        "x-codeSamples": [
+          {
+            "lang": "ruby",
+            "source": "Helo.configure do |config|\n  config.access_token = \"YOUR_BEARER_TOKEN\"\nend\n\nid = \"38400000-8cf0-11bd-b23e-10b96e4ef00d\"\nchannel_id = \"38400000-8cf0-11bd-b23e-10b96e4ef00d\"\nHelo::SMTPUsers.retrieve(id, channel_id)"
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "SMTP Users"
+        ],
+        "operationId": "smtpUser_delete",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "channelId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Delete an SMTP user",
+        "x-codeSampleId": "smtpUser_delete",
+        "x-codeSamples": [
+          {
+            "lang": "ruby",
+            "source": "Helo.configure do |config|\n  config.access_token = \"YOUR_BEARER_TOKEN\"\nend\n\nid = \"38400000-8cf0-11bd-b23e-10b96e4ef00d\"\nchannel_id = \"38400000-8cf0-11bd-b23e-10b96e4ef00d\"\nHelo::SMTPUsers.delete(id, channel_id)"
+          }
+        ]
+      }
+    },
+    "/channels": {
+      "post": {
+        "tags": [
+          "Channels"
+        ],
+        "description": "Create a new Channel.",
+        "operationId": "channel_create",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateChannelRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChannelResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse1"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse1"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse1"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Create a channel",
+        "x-codeSampleId": "channel_create",
+        "x-codeSamples": [
+          {
+            "lang": "ruby",
+            "source": "Helo.configure do |config|\n  config.access_token = \"YOUR_BEARER_TOKEN\"\nend\n\ncreate_channel_request = Helo::CreateChannelRequest.new({ name: \"name_example\", delivery_type: Helo::DeliveryType::LIVE })\nHelo::Channels.create(create_channel_request)"
+          }
+        ]
+      },
+      "get": {
+        "tags": [
+          "Channels"
+        ],
+        "description": "Fetch a list of Channels.",
+        "operationId": "channel_list",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "channelIds",
+            "in": "query",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "format": "uuid"
+              }
+            },
+            "explode": false
+          },
+          {
+            "name": "deliveryType",
+            "in": "query",
+            "schema": {
+              "enum": [
+                "live",
+                "blackhole",
+                "routed",
+                null
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginationResultOfChannelResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse1"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse1"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse1"
+                }
+              }
+            }
+          }
+        },
+        "summary": "List all channels",
+        "x-codeSampleId": "channel_list",
+        "x-codeSamples": [
+          {
+            "lang": "ruby",
+            "source": "Helo.configure do |config|\n  config.access_token = \"YOUR_BEARER_TOKEN\"\nend\n\nopts = {\n  limit: 56,\n  offset: 56,\n  name: \"name_example\",\n  channel_ids: [ \"inner_example\" ],\n  delivery_type: \"live\"\n}\nHelo::Channels.list(opts)"
+          }
+        ]
+      }
+    },
+    "/channels/{id}": {
+      "patch": {
+        "tags": [
+          "Channels"
+        ],
+        "description": "Update an existing Channel.",
+        "operationId": "channel_update",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateChannelRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChannelResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse1"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse1"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse1"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse1"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Update a channel",
+        "x-codeSampleId": "channel_update",
+        "x-codeSamples": [
+          {
+            "lang": "ruby",
+            "source": "Helo.configure do |config|\n  config.access_token = \"YOUR_BEARER_TOKEN\"\nend\n\nid = \"38400000-8cf0-11bd-b23e-10b96e4ef00d\"\nupdate_channel_request = Helo::UpdateChannelRequest.new\nHelo::Channels.update(id, update_channel_request)"
+          }
+        ]
+      },
+      "get": {
+        "tags": [
+          "Channels"
+        ],
+        "description": "Retrieve a single Channel.",
+        "operationId": "channel_retrieve",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChannelResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse1"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse1"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse1"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Retrieve a channel",
+        "x-codeSampleId": "channel_retrieve",
+        "x-codeSamples": [
+          {
+            "lang": "ruby",
+            "source": "Helo.configure do |config|\n  config.access_token = \"YOUR_BEARER_TOKEN\"\nend\n\nid = \"38400000-8cf0-11bd-b23e-10b96e4ef00d\"\nHelo::Channels.retrieve(id)"
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Channels"
+        ],
+        "description": "Delete a Channel.",
+        "operationId": "channel_delete",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse1"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse1"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse1"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Delete a channel",
+        "x-codeSampleId": "channel_delete",
+        "x-codeSamples": [
+          {
+            "lang": "ruby",
+            "source": "Helo.configure do |config|\n  config.access_token = \"YOUR_BEARER_TOKEN\"\nend\n\nid = \"38400000-8cf0-11bd-b23e-10b96e4ef00d\"\nHelo::Channels.delete(id)"
+          }
+        ]
+      }
+    },
+    "/domains": {
+      "post": {
+        "tags": [
+          "Domains"
+        ],
+        "operationId": "domain_create",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateDomainRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateDomainRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateDomainRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/DomainWithDnsResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DomainWithDnsResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DomainWithDnsResponse"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Create a domain",
+        "x-codeSampleId": "domain_create",
+        "x-codeSamples": [
+          {
+            "lang": "ruby",
+            "source": "Helo.configure do |config|\n  config.access_token = \"YOUR_BEARER_TOKEN\"\nend\n\ncreate_domain_request = Helo::CreateDomainRequest.new\nHelo::Domains.create(create_domain_request)"
+          }
+        ]
+      },
+      "get": {
+        "tags": [
+          "Domains"
+        ],
+        "operationId": "domain_list",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 20
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedResponseOfDomainResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedResponseOfDomainResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedResponseOfDomainResponse"
+                }
+              }
+            }
+          }
+        },
+        "summary": "List all domains",
+        "x-codeSampleId": "domain_list",
+        "x-codeSamples": [
+          {
+            "lang": "ruby",
+            "source": "Helo.configure do |config|\n  config.access_token = \"YOUR_BEARER_TOKEN\"\nend\n\nopts = {\n  limit: 56,\n  offset: 56\n}\nHelo::Domains.list(opts)"
+          }
+        ]
+      }
+    },
+    "/domains/{id}": {
+      "patch": {
+        "tags": [
+          "Domains"
+        ],
+        "operationId": "domain_update",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateDomainRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateDomainRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateDomainRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "summary": "Update a domain",
+        "x-codeSampleId": "domain_update",
+        "x-codeSamples": [
+          {
+            "lang": "ruby",
+            "source": "Helo.configure do |config|\n  config.access_token = \"YOUR_BEARER_TOKEN\"\nend\n\nid = \"38400000-8cf0-11bd-b23e-10b96e4ef00d\"\nupdate_domain_request = Helo::UpdateDomainRequest.new\nHelo::Domains.update(id, update_domain_request)"
+          }
+        ]
+      },
+      "get": {
+        "tags": [
+          "Domains"
+        ],
+        "operationId": "domain_retrieve",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/DomainWithDnsResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DomainWithDnsResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DomainWithDnsResponse"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Retrieve a domain",
+        "x-codeSampleId": "domain_retrieve",
+        "x-codeSamples": [
+          {
+            "lang": "ruby",
+            "source": "Helo.configure do |config|\n  config.access_token = \"YOUR_BEARER_TOKEN\"\nend\n\nid = \"38400000-8cf0-11bd-b23e-10b96e4ef00d\"\nHelo::Domains.retrieve(id)"
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Domains"
+        ],
+        "operationId": "domain_delete",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "summary": "Delete a domain",
+        "x-codeSampleId": "domain_delete",
+        "x-codeSamples": [
+          {
+            "lang": "ruby",
+            "source": "Helo.configure do |config|\n  config.access_token = \"YOUR_BEARER_TOKEN\"\nend\n\nid = \"38400000-8cf0-11bd-b23e-10b96e4ef00d\"\nHelo::Domains.delete(id)"
+          }
+        ]
+      }
+    },
+    "/domains/{id}/verify": {
+      "post": {
+        "tags": [
+          "Domains"
+        ],
+        "operationId": "domain_verify",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/DnsRecordsResponse2"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DnsRecordsResponse2"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DnsRecordsResponse2"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Verify a domain",
+        "x-codeSampleId": "domain_verify",
+        "x-codeSamples": [
+          {
+            "lang": "ruby",
+            "source": "Helo.configure do |config|\n  config.access_token = \"YOUR_BEARER_TOKEN\"\nend\n\nid = \"38400000-8cf0-11bd-b23e-10b96e4ef00d\"\nHelo::Domains.verify(id)"
+          }
+        ]
+      }
+    },
+    "/domains/{id}/rotate-domainkey": {
+      "post": {
+        "tags": [
+          "Domains"
+        ],
+        "operationId": "domain_rotateKey",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/DnsRecordResponse2"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DnsRecordResponse2"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DnsRecordResponse2"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Rotate a domain key",
+        "x-codeSampleId": "domain_rotateKey",
+        "x-codeSamples": [
+          {
+            "lang": "ruby",
+            "source": "Helo.configure do |config|\n  config.access_token = \"YOUR_BEARER_TOKEN\"\nend\n\nid = \"38400000-8cf0-11bd-b23e-10b96e4ef00d\"\nHelo::Domains.rotate_key(id)"
+          }
+        ]
       }
     }
   },
   "components": {
     "schemas": {
-      "Plant": {
+      "ApiCredentialResponse": {
         "required": [
-          "name"
+          "id",
+          "permissions",
+          "createdAt",
+          "updatedAt"
         ],
         "type": "object",
         "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
           "name": {
-            "description": "The name of the plant",
+            "type": "string",
+            "nullable": true
+          },
+          "channelId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "permissions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ApiCredentialResponseWithKey": {
+        "required": [
+          "id",
+          "permissions",
+          "secret",
+          "apiKey",
+          "createdAt",
+          "updatedAt"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "channelId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "permissions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "secret": {
             "type": "string"
           },
-          "tag": {
-            "description": "Tag to specify the type",
+          "apiKey": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "CreateSmtpUserRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "mailType": {
+            "$ref": "#/components/schemas/NullableOfMailType"
+          }
+        }
+      },
+      "CreateUserRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "role": {
             "type": "string"
           }
         }
       },
-      "NewPlant": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Plant"
-          },
-          {
-            "required": [
-              "id"
-            ],
-            "type": "object",
-            "properties": {
-              "id": {
-                "description": "Identification number of the plant",
-                "type": "integer",
-                "format": "int64"
-              }
-            }
-          }
-        ]
-      },
-      "Error": {
-        "required": [
-          "error",
-          "message"
-        ],
+      "ErrorResponse": {
         "type": "object",
         "properties": {
-          "error": {
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
             "type": "integer",
             "format": "int32"
           },
-          "message": {
+          "detail": {
+            "type": "string",
+            "nullable": true
+          },
+          "instance": {
+            "type": "string",
+            "nullable": true
+          },
+          "code": {
+            "type": "string",
+            "nullable": true
+          },
+          "errors": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "nullable": true
+          },
+          "correlationId": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "GenerateApiCredentialRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "permissions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "channelId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          }
+        }
+      },
+      "MailType": {
+        "enum": [
+          "Unknown",
+          "Transactional",
+          "Broadcast"
+        ]
+      },
+      "NullableOfMailType": {
+        "enum": [
+          "Unknown",
+          "Transactional",
+          "Broadcast",
+          null
+        ],
+        "nullable": true
+      },
+      "OptionalOfNullableOfGuid": {
+        "type": "string",
+        "nullable": true
+      },
+      "OptionalOfstring": {
+        "type": "string",
+        "nullable": true
+      },
+      "PaginationResultOfApiCredentialResponse": {
+        "required": [
+          "results",
+          "totalCount"
+        ],
+        "type": "object",
+        "properties": {
+          "results": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ApiCredentialResponse"
+            }
+          },
+          "totalCount": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "PaginationResultOfSmtpUserResponse": {
+        "required": [
+          "results",
+          "totalCount"
+        ],
+        "type": "object",
+        "properties": {
+          "results": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SmtpUserResponse"
+            }
+          },
+          "totalCount": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "PaginationResultOfUserResponse": {
+        "required": [
+          "results",
+          "totalCount"
+        ],
+        "type": "object",
+        "properties": {
+          "results": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UserResponse"
+            }
+          },
+          "totalCount": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "SmtpUserResponse": {
+        "required": [
+          "id",
+          "accountId",
+          "channelId",
+          "mailType",
+          "createdAt",
+          "updatedAt"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "accountId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "channelId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "mailType": {
+            "$ref": "#/components/schemas/MailType"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "SmtpUserUpdateRequest": {
+        "type": "object",
+        "properties": {
+          "mailType": {
+            "$ref": "#/components/schemas/NullableOfMailType"
+          },
+          "name": {
+            "$ref": "#/components/schemas/OptionalOfstring"
+          }
+        }
+      },
+      "SmtpUserWithPasswordResponse": {
+        "required": [
+          "password",
+          "id",
+          "accountId",
+          "channelId",
+          "mailType",
+          "createdAt",
+          "updatedAt"
+        ],
+        "type": "object",
+        "properties": {
+          "password": {
             "type": "string"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "accountId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "channelId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "mailType": {
+            "$ref": "#/components/schemas/MailType"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "UpdateApiCredentialRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "$ref": "#/components/schemas/OptionalOfstring"
+          },
+          "channelId": {
+            "$ref": "#/components/schemas/OptionalOfNullableOfGuid"
+          },
+          "permissions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          }
+        }
+      },
+      "UpdateUserRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "role": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "UserResponse": {
+        "required": [
+          "id",
+          "email",
+          "permissions",
+          "roleName",
+          "name",
+          "createdAt",
+          "updatedAt"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "email": {
+            "type": "string"
+          },
+          "permissions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "roleName": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ValidationError": {
+        "type": "object",
+        "properties": {
+          "field": {
+            "type": "string",
+            "nullable": true
+          },
+          "message": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "ChannelResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "deliveryType": {
+            "$ref": "#/components/schemas/DeliveryType"
+          },
+          "trackLinks": {
+            "type": "boolean"
+          },
+          "trackOpens": {
+            "type": "boolean"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "CreateChannelRequest": {
+        "required": [
+          "name",
+          "deliveryType"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "deliveryType": {
+            "$ref": "#/components/schemas/DeliveryType"
+          }
+        }
+      },
+      "DeliveryType": {
+        "enum": [
+          "live",
+          "blackhole",
+          "routed"
+        ]
+      },
+      "ErrorResponse1": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "instance": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "code": {
+            "type": "string",
+            "nullable": true
+          },
+          "detail": {
+            "type": "string",
+            "nullable": true
+          },
+          "requestId": {
+            "type": "string",
+            "nullable": true
+          },
+          "errors": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "nullable": true
+          }
+        }
+      },
+      "PaginationResultOfChannelResponse": {
+        "required": [
+          "results",
+          "totalCount"
+        ],
+        "type": "object",
+        "properties": {
+          "results": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ChannelResponse"
+            }
+          },
+          "totalCount": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "UpdateChannelRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "deliveryType": {
+            "$ref": "#/components/schemas/DeliveryType"
+          },
+          "trackLinks": {
+            "type": "boolean"
+          },
+          "trackOpens": {
+            "type": "boolean"
+          }
+        }
+      },
+      "CreateDomainRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "channels": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "nullable": true
+          }
+        }
+      },
+      "DnsRecordResponse": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "$ref": "#/components/schemas/DnsRecordType"
+          },
+          "host": {
+            "type": "string",
+            "nullable": true
+          },
+          "value": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "$ref": "#/components/schemas/DnsRecordStatus"
+          }
+        },
+        "nullable": true
+      },
+      "DnsRecordResponse2": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "$ref": "#/components/schemas/DnsRecordType"
+          },
+          "host": {
+            "type": "string",
+            "nullable": true
+          },
+          "value": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "$ref": "#/components/schemas/DnsRecordStatus"
+          }
+        }
+      },
+      "DnsRecordsResponse": {
+        "type": "object",
+        "properties": {
+          "domainKeyActive": {
+            "$ref": "#/components/schemas/DnsRecordResponse"
+          },
+          "domainKeyPending": {
+            "$ref": "#/components/schemas/DnsRecordResponse"
+          },
+          "returnPath": {
+            "$ref": "#/components/schemas/DnsRecordResponse"
+          },
+          "tracking": {
+            "$ref": "#/components/schemas/DnsRecordResponse"
+          },
+          "unsubscribe": {
+            "$ref": "#/components/schemas/DnsRecordResponse"
+          }
+        },
+        "nullable": true
+      },
+      "DnsRecordsResponse2": {
+        "type": "object",
+        "properties": {
+          "domainKeyActive": {
+            "$ref": "#/components/schemas/DnsRecordResponse"
+          },
+          "domainKeyPending": {
+            "$ref": "#/components/schemas/DnsRecordResponse"
+          },
+          "returnPath": {
+            "$ref": "#/components/schemas/DnsRecordResponse"
+          },
+          "tracking": {
+            "$ref": "#/components/schemas/DnsRecordResponse"
+          },
+          "unsubscribe": {
+            "$ref": "#/components/schemas/DnsRecordResponse"
+          }
+        }
+      },
+      "DnsRecordStatus": {
+        "enum": [
+          "Pending",
+          "Verified",
+          "Failing",
+          "Failed"
+        ]
+      },
+      "DnsRecordType": {
+        "enum": [
+          "TXT",
+          "CNAME"
+        ]
+      },
+      "DomainResponse": {
+        "required": [
+          "channels"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "verified": {
+            "type": "boolean"
+          },
+          "returnPathDomain": {
+            "type": "string",
+            "nullable": true
+          },
+          "trackingDomain": {
+            "type": "string",
+            "nullable": true
+          },
+          "unsubscribeDomain": {
+            "type": "string",
+            "nullable": true
+          },
+          "channels": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "nullable": true
+          }
+        }
+      },
+      "DomainWithDnsResponse": {
+        "required": [
+          "channels"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "verified": {
+            "type": "boolean"
+          },
+          "returnPathDomain": {
+            "type": "string",
+            "nullable": true
+          },
+          "trackingDomain": {
+            "type": "string",
+            "nullable": true
+          },
+          "unsubscribeDomain": {
+            "type": "string",
+            "nullable": true
+          },
+          "channels": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "nullable": true
+          },
+          "dnsRecords": {
+            "$ref": "#/components/schemas/DnsRecordsResponse"
+          }
+        }
+      },
+      "PaginatedResponseOfDomainResponse": {
+        "required": [
+          "totalCount",
+          "results"
+        ],
+        "type": "object",
+        "properties": {
+          "totalCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "results": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DomainResponse"
+            }
+          }
+        }
+      },
+      "UpdateDomainRequest": {
+        "type": "object",
+        "properties": {
+          "channels": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "nullable": true
           }
         }
       }
@@ -210,7 +3061,8 @@
     "securitySchemes": {
       "bearerAuth": {
         "type": "http",
-        "scheme": "bearer"
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
       }
     }
   }
