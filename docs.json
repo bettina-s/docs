@@ -52,7 +52,7 @@
         "groups": [
           {
             "group": "API documentation",
-            "openapi": "openapi.json"
+            "openapi": "apireference/openapi.json",
             "pages": [
               "api-reference/introduction"
             ]
