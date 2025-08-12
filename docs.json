@@ -49,7 +49,7 @@
       },
       {
         "tab": "Helo Specs",
-        "openapi": "openapi.json"
+        "openapi": "http://wolfgang-gruel.de/helo/openapi.json"
       },
       {
         "tab": "API reference",
