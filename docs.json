@@ -52,7 +52,6 @@
         "groups": [
           {
             "group": "API documentation",
-            "openapi": "apireference/openapi.json",
             "pages": [
               "api-reference/introduction"
             ]
@@ -73,7 +72,6 @@
         "groups": [
           {
             "group": "API documentation",
-            "openapi": "apireference/openapi.json",
             "pages": [
               "api-reference/introduction"
             ]
