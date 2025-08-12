@@ -49,22 +49,7 @@
       },
       {
         "tab": "Helo Specs",
-        "openapi": "https://petstore3.swagger.io/api/v3/openapi.json",
-        "groups": [
-          {
-            "group": "API documentation",
-            "pages": [
-              "api-reference/introduction"
-            ]
-          },
-          {
-            "group": "Endpoint examples",
-            "pages": [
-              "api-reference/endpoint/get",
-              "api-reference/endpoint/webhook"
-            ]
-          }
-        ]
+        "openapi": "https://petstore3.swagger.io/api/v3/openapi.json"
       },
       {
         "tab": "API reference",
