@@ -54,7 +54,7 @@
           {
             "group": "Users",
             "pages": [
-              "api-reference/endpoint/users/overview"
+              "api-reference/endpoint/users/overview",
               "GET /users",
               "POST /users"
             ]
