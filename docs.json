@@ -54,7 +54,7 @@
           {
             "group": "Users",
             "pages": [
-              "endpoints/users/overview",
+              "endpoint/users/overview",
               "GET /users",
               "POST /users"
             ]
@@ -62,7 +62,7 @@
           {
             "group": "Channels",
             "pages": [
-              "endpoints/channels/overview",
+              "endpoint/channels/overview",
               "GET /channels",
               "POST /channels"
             ]
