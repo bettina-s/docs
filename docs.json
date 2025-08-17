@@ -46,7 +46,29 @@
             ]
           }
         ]
-      },      
+      },
+      {
+        "tab": "Manual API Reference",
+        "openapi": "helo.json",
+        "groups": [
+          {
+            "group": "Users",
+            "pages": [
+              "quickstart",
+              "GET /users",
+              "POST /users"
+            ]
+          },
+          {
+            "group": "Channels",
+            "pages": [
+              "development",
+              "GET /channels",
+              "POST /channels"
+            ]
+          }
+        ]
+      },    
       {
         "tab": "Auto-Generated API Reference",
         "openapi": "helo.json"
