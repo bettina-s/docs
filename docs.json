@@ -10,7 +10,43 @@
   "favicon": "/favicon.svg",
   "navigation": {
     "tabs": [
-
+      {
+        "tab": "My Guides",
+        "groups": [
+          {
+            "group": "Start here",
+            "pages": [
+              "index",
+              "quickstart",
+              "development"
+            ]
+          },
+          {
+            "group": "Customization",
+            "pages": [
+              "essentials/settings",
+              "essentials/navigation"
+            ]
+          },
+          {
+            "group": "Writing content",
+            "pages": [
+              "essentials/markdown",
+              "essentials/code",
+              "essentials/images",
+              "essentials/reusable-snippets"
+            ]
+          },
+          {
+            "group": "AI tools",
+            "pages": [
+              "ai-tools/cursor",
+              "ai-tools/claude-code",
+              "ai-tools/windsurf"
+            ]
+          }
+        ]
+      },
       {
         "tab": "Manual API Reference",
         "openapi": "helo.json",
@@ -18,7 +54,6 @@
           {
             "group": "Users",
             "pages": [
-              "endpoint/users/overview",
               "GET /users",
               "POST /users"
             ]
@@ -26,7 +61,6 @@
           {
             "group": "Channels",
             "pages": [
-              "endpoint/channels/overview",
               "GET /channels",
               "POST /channels"
             ]
