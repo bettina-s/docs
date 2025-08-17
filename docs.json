@@ -74,9 +74,8 @@
         "tab": "Auto-Generated API Reference",
         "openapi": "helo.json"
       },      
-
-      /*{
-        "tab": "API reference",
+      {
+        "tab": "Mintlify Example",
         "openapi": "https://petstore3.swagger.io/api/v3/openapi.json",
         "groups": [
           {
@@ -96,7 +95,7 @@
             ]
           }
         ]
-      }*/
+      }
     ],
     "global": {
       "anchors": [
