@@ -54,7 +54,7 @@
           {
             "group": "Users",
             "pages": [
-              "quickstart",
+              "endpoints/users/overview",
               "GET /users",
               "POST /users"
             ]
@@ -62,7 +62,7 @@
           {
             "group": "Channels",
             "pages": [
-              "development",
+              "endpoints/channels/overview",
               "GET /channels",
               "POST /channels"
             ]
@@ -86,10 +86,10 @@
           {
             "group": "Endpoint examples",
             "pages": [
-              "api-reference/endpoint/get",
-              "api-reference/endpoint/create",
-              "api-reference/endpoint/delete",
-              "api-reference/endpoint/webhook"
+              "api-reference/demo-endpoint/get",
+              "api-reference/demo-endpoint/create",
+              "api-reference/demo-endpoint/delete",
+              "api-reference/demo-endpoint/webhook"
             ]
           }
         ]
