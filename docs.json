@@ -11,6 +11,33 @@
   "navigation": {
     "tabs": [
       {
+        "tab": "Helo API Reference",
+        "groups": [
+          {
+            "group": "Users",
+            "openapi": "/helo.json",
+            "pages": [
+              "api-reference/asdf",
+              "GET /users",
+              "POST /users"
+            ]
+          },
+          {
+            "group": "Channels",
+            "openapi": "/helo.json",
+            "pages": [
+              "api-reference/asdf",
+              "GET /channels",
+              "POST /channels"
+            ]
+          }
+        ]
+      },      
+      {
+        "tab": "Helo Specs",
+        "openapi": "helo.json"
+      },      
+      {
         "tab": "My Guides",
         "groups": [
           {
@@ -46,10 +73,6 @@
             ]
           }
         ]
-      },
-      {
-        "tab": "Helo Specs",
-        "openapi": "helo.json"
       },
       {
         "tab": "API reference",
