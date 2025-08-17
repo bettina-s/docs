@@ -48,29 +48,6 @@
         ]
       },      
       {
-        "tab": "Manual API Reference",
-        "openapi": "helo.json",
-        "groups": [
-          {
-            "group": "Users",
-            "pages": [
-              "quickstart",
-              "GET /users",
-              "POST /users", 
-              "api-reference/endpoint/delete"
-            ]
-          },
-          {
-            "group": "Channels",
-            "pages": [
-              "development",
-              "GET /channels",
-              "POST /channels"
-            ]
-          }
-        ]
-      },      
-      {
         "tab": "Auto-Generated API Reference",
         "openapi": "helo.json"
       },      
@@ -90,8 +67,7 @@
               "api-reference/endpoint/get",
               "api-reference/endpoint/create",
               "api-reference/endpoint/delete",
-              "api-reference/endpoint/webhook",
-              "api-reference/endpoint/asdf"
+              "api-reference/endpoint/webhook"
             ]
           }
         ]
