@@ -19,7 +19,9 @@
             "pages": [
               "quickstart",
               "GET /users",
-              "POST /users"
+              "POST /users", 
+              "api-reference/endpoints/delete"
+              
             ]
           },
           {
