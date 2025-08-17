@@ -62,6 +62,7 @@
           {
             "group": "Channels",
             "pages": [
+              "api-reference/endpoint/channels/overview",
               "GET /channels",
               "POST /channels"
             ]
