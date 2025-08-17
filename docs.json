@@ -12,21 +12,20 @@
     "tabs": [
       {
         "tab": "Helo API Reference",
+        "openapi": "helo.json",
         "groups": [
           {
             "group": "Users",
-            "openapi": "/helo.json",
             "pages": [
-              "api-reference/asdf",
+              "quickstart",
               "GET /users",
               "POST /users"
             ]
           },
           {
             "group": "Channels",
-            "openapi": "/helo.json",
             "pages": [
-              "api-reference/asdf",
+              "development",
               "GET /channels",
               "POST /channels"
             ]
