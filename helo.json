@@ -61,18 +61,12 @@
             "schema": {
               "anyOf": [
                 {
-                  "type": "Date"
-                },
-                {
                   "format": "date-time",
                   "type": "string"
                 },
                 {
                   "format": "date",
                   "type": "string"
-                },
-                {
-                  "type": "number"
                 }
               ]
             },
@@ -84,18 +78,12 @@
             "schema": {
               "anyOf": [
                 {
-                  "type": "Date"
-                },
-                {
                   "format": "date-time",
                   "type": "string"
                 },
                 {
                   "format": "date",
                   "type": "string"
-                },
-                {
-                  "type": "number"
                 }
               ]
             },
@@ -115,194 +103,11 @@
         ],
         "responses": {
           "200": {
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "results": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "id": {
-                            "type": "string"
-                          },
-                          "messageId": {
-                            "format": "uuid",
-                            "type": "string"
-                          },
-                          "channelId": {
-                            "format": "uuid",
-                            "type": "string"
-                          },
-                          "mailType": {
-                            "anyOf": [
-                              {
-                                "const": "Transactional",
-                                "type": "string"
-                              },
-                              {
-                                "const": "Broadcast",
-                                "type": "string"
-                              }
-                            ]
-                          },
-                          "mailSource": {
-                            "anyOf": [
-                              {
-                                "const": "Smtp",
-                                "type": "string"
-                              },
-                              {
-                                "const": "Api",
-                                "type": "string"
-                              }
-                            ]
-                          },
-                          "eventType": {
-                            "anyOf": [
-                              {
-                                "const": "Accepted",
-                                "type": "string"
-                              },
-                              {
-                                "const": "Processed",
-                                "type": "string"
-                              },
-                              {
-                                "const": "Delivered",
-                                "type": "string"
-                              },
-                              {
-                                "const": "Bounced",
-                                "type": "string"
-                              },
-                              {
-                                "const": "Opened",
-                                "type": "string"
-                              },
-                              {
-                                "const": "Clicked",
-                                "type": "string"
-                              },
-                              {
-                                "const": "ReportedSpam",
-                                "type": "string"
-                              },
-                              {
-                                "const": "SubscriptionChanged",
-                                "type": "string"
-                              }
-                            ]
-                          },
-                          "timestamp": {
-                            "anyOf": [
-                              {
-                                "type": "Date"
-                              },
-                              {
-                                "format": "date-time",
-                                "type": "string"
-                              },
-                              {
-                                "format": "date",
-                                "type": "string"
-                              },
-                              {
-                                "type": "number"
-                              }
-                            ]
-                          },
-                          "subject": {
-                            "type": "string"
-                          },
-                          "recipients": {
-                            "type": "array",
-                            "items": {
-                              "type": "string"
-                            }
-                          }
-                        },
-                        "required": [
-                          "id",
-                          "messageId",
-                          "channelId",
-                          "mailType",
-                          "eventType",
-                          "timestamp",
-                          "subject",
-                          "recipients"
-                        ]
-                      }
-                    },
-                    "after": {
-                      "type": "string"
-                    },
-                    "totalCount": {
-                      "type": "number"
-                    }
-                  },
-                  "required": [
-                    "results",
-                    "totalCount"
-                  ]
-                }
-              }
-            }
-          },
-          "401": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "403": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "422": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string"
-                    },
-                    "errors": {
-                      "type": "object",
-                      "patternProperties": {
-                        "^(.*)$": {
-                          "type": "array",
-                          "items": {
-                            "type": "string"
-                          }
-                        }
-                      }
-                    }
-                  },
-                  "required": [
-                    "message"
-                  ]
+                  "$ref": "#/components/schemas/ApiCredentialResponseWithKey"
                 }
               }
             }
@@ -312,13 +117,6 @@
         "tags": [
           "ActivityEvents"
         ],
-        "detail": {
-          "security": [
-            {
-              "bearerAuth": []
-            }
-          ]
-        },
         "summary": "List all activity events",
         "x-codeSampleId": "activityEvents_list",
         "x-codeSamples": [
