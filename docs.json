@@ -52,6 +52,12 @@
         "openapi": "helo.json",
         "groups": [
           {
+            "group": "Test",
+            "pages": [
+              "api-reference/endpoint/intro/introduction"
+            ]
+          },
+          {
             "group": "Users",
             "pages": [
               "api-reference/endpoint/users/overview",
