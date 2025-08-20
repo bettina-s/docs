@@ -52,7 +52,7 @@
         "openapi": "helo.json",
         "groups": [
           {
-            "group": "Test",
+            "group": "Start here",
             "pages": [
               "api-reference/endpoint/intro/introduction"
             ]
