@@ -78,6 +78,14 @@
       {
         "tab": "Auto-Generated API Reference",
         "openapi": "helo.json"
+        "groups": [
+          {
+            "group": "Start here",
+            "pages": [
+              "api-reference/endpoint/intro/introduction"
+            ]
+          }
+        ]
       },      
       {
         "tab": "Mintlify Example",
