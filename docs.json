@@ -96,7 +96,8 @@
               "api-reference/demo-endpoint/get",
               "api-reference/demo-endpoint/create",
               "api-reference/demo-endpoint/delete",
-              "api-reference/demo-endpoint/webhook"
+              "api-reference/demo-endpoint/webhook",
+              "api-reference/demo-endpoint/retrieveuser"
             ]
           }
         ]
