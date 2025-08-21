@@ -78,7 +78,16 @@
               "PATCH /channels/{channelId}/smtp-users/{id}"
             ]
           },
-          
+          {
+            "group": "Channels",
+            "pages": [
+              "GET /channels",
+              "POST /channels",
+              "GET /channels/{id}",
+              "DELETE /channels/{id}",
+              "PATCH /channels/{id}"
+            ]
+          },
           {
             "group": "Domains",
             "pages": [
