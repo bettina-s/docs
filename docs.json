@@ -62,7 +62,8 @@
             "pages": [
               "api-reference/endpoint/users/overview",
               "GET /users",
-              "POST /users"
+              "POST /users",
+              "GET /users/{id}"
             ]
           },
           {
