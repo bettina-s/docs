@@ -63,7 +63,9 @@
               "api-reference/endpoint/users/overview",
               "GET /users",
               "POST /users",
-              "GET /users/{id}"
+              "GET /users/{id}",
+              "DELETE /users/{id}",
+              "PATCH /users/{id}"
             ]
           },
           {
@@ -96,8 +98,7 @@
               "api-reference/demo-endpoint/get",
               "api-reference/demo-endpoint/create",
               "api-reference/demo-endpoint/delete",
-              "api-reference/demo-endpoint/webhook",
-              "api-reference/demo-endpoint/retrieveuser"
+              "api-reference/demo-endpoint/webhook"
             ]
           }
         ]
