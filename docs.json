@@ -11,7 +11,7 @@
   "navigation": {
     "tabs": [
       {
-        "tab": "My Guides",
+        "tab": "Knowledge Base",
         "groups": [
           {
             "group": "Start here",
@@ -37,6 +37,32 @@
               "essentials/reusable-snippets"
             ]
           },
+          {
+        "tab": "Quickstart",
+        "groups": [
+          {
+            "group": "Start here",
+            "pages": [
+              "quickstart/quickstart"
+            ]
+          },
+          {
+            "group": "Email Sending",
+            "pages": [
+              "essentials/settings",
+              "essentials/navigation"
+            ]
+          },
+          {
+            "group": "Deliverability",
+            "pages": [
+              "essentials/markdown",
+              "essentials/code",
+              "essentials/images",
+              "essentials/reusable-snippets"
+            ]
+          },
+
           {
             "group": "Domain Verification",
             "pages": [
