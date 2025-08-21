@@ -89,18 +89,6 @@
               "PATCH /channels/{id}"
             ]
           }
-          {
-            "group": "Domains",
-            "pages": [
-              "GET /domains",
-              "POST /domains",
-              "POST /domains/{id}",
-              "DELETE /domains/{id}",
-              "PATCH /domains/{id}",
-              "Post /domains/{id}/verify",
-              "Post /domains/{id}/rotate-domainkey"
-            ]
-          }
         ]
       },    
       {
