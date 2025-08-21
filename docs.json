@@ -22,14 +22,14 @@
             ]
           },
           {
-            "group": "Customization",
+            "group": "Email Sending",
             "pages": [
               "essentials/settings",
               "essentials/navigation"
             ]
           },
           {
-            "group": "Writing content",
+            "group": "Deliverability",
             "pages": [
               "essentials/markdown",
               "essentials/code",
@@ -38,7 +38,15 @@
             ]
           },
           {
-            "group": "AI tools",
+            "group": "Domain Verification",
+            "pages": [
+              "ai-tools/cursor",
+              "ai-tools/claude-code",
+              "ai-tools/windsurf"
+            ]
+          },
+          {
+            "group": "Sending on behalf of others",
             "pages": [
               "ai-tools/cursor",
               "ai-tools/claude-code",
