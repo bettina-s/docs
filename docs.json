@@ -78,15 +78,17 @@
               "PATCH /channels/{channelId}/smtp-users/{id}"
             ]
           },
+          
           {
-            "group": "Channels",
+            "group": "Domains",
             "pages": [
-              "api-reference/endpoint/channels/overview",
-              "GET /channels",
-              "POST /channels",
-              "POST /channels/{id}",
-              "DELETE /channels/{id}",
-              "PATCH /channels/{id}"
+              "GET /domains",
+              "POST /domains",
+              "POST /domains/{id}",
+              "DELETE /domains/{id}",
+              "PATCH /domains/{id}",
+              "Post /domains/{id}/verify",
+              "Post /domains/{id}/rotate-domainkey"
             ]
           }
         ]
