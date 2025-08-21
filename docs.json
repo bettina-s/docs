@@ -69,6 +69,16 @@
             ]
           },
           {
+            "group": "SMTP Users",
+            "pages": [
+              "GET /channels/{channelId}/smtp-users",
+              "POST /channels/{channelId}/smtp-users",
+              "GET /channels/{channelId}/smtp-users/{id}",
+              "DELETE /channels/{channelId}/smtp-users/{id}",
+              "PATCH /channels/{channelId}/smtp-users/{id}"
+            ]
+          },
+          {
             "group": "Channels",
             "pages": [
               "api-reference/endpoint/channels/overview",
