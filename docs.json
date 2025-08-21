@@ -81,6 +81,7 @@
           {
             "group": "Channels",
             "pages": [
+              "api-reference/endpoint/channels/overview",
               "GET /channels",
               "POST /channels",
               "GET /channels/{id}",
@@ -92,7 +93,12 @@
             "group": "Domains",
             "pages": [
               "GET /domains",
-              "POST /domains"
+              "POST /domains",
+              "GET /domains/{id}",
+              "DELETE /domains/{id}",
+              "PATCH /domains/{id}",
+              "POST /domains/{id}/verify",
+              "POST /domains/{id}/rotate-domainkey"
             ]
           }
         ]
